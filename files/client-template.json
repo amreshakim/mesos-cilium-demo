@@ -1,0 +1,14 @@
+{
+    "id": "client", 
+    "cmd": "while [ true ] ; do echo 'GET /public' ; curl http://__WEBSERVER_IP__:8181/public; echo 'GET /private'; echo `curl http://__WEBSERVER_IP__:8181/private`; echo '--------------------------------'; sleep 5 ; done",
+    "cpus": 0.1,
+    "mem": 10.0,
+    "instances": 1,
+    "ipAddress": {
+     "networkName": "cilium",
+     "labels": {
+       "id": "client"
+     }
+  }
+
+}
