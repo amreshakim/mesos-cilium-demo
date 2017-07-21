@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ -z "$HOST_IP" ]]; then
+    HOST_IP=192.168.100.10
+fi
+
 echo "Starting mesos master..."
 nohup sudo mesos-master --ip=$HOST_IP --work_dir=/var/lib/mesos &> ~/mesos-master.log &
 sleep 1
