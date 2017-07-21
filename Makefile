@@ -3,4 +3,4 @@ all: 	tar
 tar: 	clean
 	tar czvf allfiles.tar.gz -C files .
 clean:
-	rm allfiles.tar.gz
+	$(RM) allfiles.tar.gz
