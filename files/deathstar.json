@@ -1,0 +1,14 @@
+{
+    "id": "starwars-server",
+    "cmd": "wget http://github.com/amreshakim/misc/raw/master/starwars-docker; chmod a+x starwars-docker; ./starwars-docker --port 8383",
+    "cpus": 0.1,
+    "mem": 216.0,
+    "instances": 1,
+    "ipAddress": {
+     "networkName": "cilium",
+     "labels": {
+       "id": "starwars-server"
+     }
+  }
+
+}
