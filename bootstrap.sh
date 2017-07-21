@@ -5,10 +5,12 @@ apt-get update
 #install new kernel?
 
 apt -y install docker.io
-#apt -y install openjdk-8-jre-headless
 
 curl -sL http://repos.mesosphere.com/ubuntu/pool/main/m/mesos/mesos_1.3.0-2.0.3.ubuntu1610_amd64.deb > /tmp/mesos_1.3.0-2.0.3.ubuntu1610_amd64.deb
 apt -y install /tmp/mesos_1.3.0-2.0.3.ubuntu1610_amd64.deb
+
+# remove openjdk-9 as it conflicts with zookeeper
+# removing openjdk-9 will install openjdk-8 automatically
 apt -y remove openjdk-9-jre-headless
 
 echo "zk://localhost:2181/mesos" >> /etc/mesos/zk
@@ -41,10 +43,10 @@ while [[ -z $cilium_docker ]]; do
         cilium_docker=$(docker ps -a -q --filter="ancestor=cilium/cilium:latest" --filter="status=running")
 done
 
+# copy cilium from container to host
 mkdir /home/vagrant/bin
 docker cp $cilium_docker:/usr/bin/cilium bin/cilium
 docker exec $cilium_docker ./cni-install.sh
-
 echo 'PATH=$PATH:/home/vagrant/bin' >> /home/vagrant/.bashrc
 
 chown -R vagrant:vagrant /home/vagrant/
