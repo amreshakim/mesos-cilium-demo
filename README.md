@@ -36,15 +36,15 @@ There is no easy way to retrieve the logs of the client, so use the following sc
 
     ./tail_client.sh
 
-Make sure the previous command continuesly prints the result of the client accessing /public and /private API of the web-server:
+Make sure the previous command continuously prints the result of the client accessing */public* and */private* API of the web-server:
 
-Now, in a different terminal apply a provided policy that allows accessing only /public API:
+Now, in a different terminal apply a provided policy that allows accessing only */public* API:
 
     cilium policy import l7-policy.json
 
-Check the client's log and you should see that /private is no longer accessible.
+Check the client's log and you should see that */private* is no longer accessible.
 
-(optional) Remove the policy and notice that the access to /private is again unrestricted:
+(optional) Remove the policy and notice that the access to */private* is again unrestricted:
 
     cilium policy delete --all
 
@@ -54,7 +54,7 @@ To clean the node kill all mesos-master, mesos-agent, marathon related processes
 
 ### start\_everything.sh dumps core or exits with erros
 
-Inspect /tmp/mesos-master.log, /tmp/mesos-agent.log and /tmp/marathon.log for any obvious errors.
+Inspect */tmp/mesos-master.log*, */tmp/mesos-agent.log* and *gg/tmp/marathon.log* for any obvious errors.
 Kill any previous mesos/marathon processes if needed.
 
 ### tail\_client.sh does not print anything
