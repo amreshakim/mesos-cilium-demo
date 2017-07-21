@@ -54,7 +54,7 @@ To clean the node kill all mesos-master, mesos-agent, marathon related processes
 
 ### start\_everything.sh dumps core or exits with erros
 
-Inspect */tmp/mesos-master.log*, */tmp/mesos-agent.log* and *gg/tmp/marathon.log* for any obvious errors.
+Inspect *mesos-master.log*, *mesos-agent.log* and *marathon.log* for any obvious errors.
 Kill any previous mesos/marathon processes if needed.
 
 ### tail\_client.sh does not print anything
