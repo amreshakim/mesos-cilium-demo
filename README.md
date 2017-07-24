@@ -8,13 +8,17 @@ You can play with a provided simple Cilium policy applied to a dummy
 
 ## Instructions
 
-Build, start and login into the VBox:
+Build VBox:
     
     make all
 
-Inside of the Virtual Box start Apache Mesos (master and agent) and Marathon:
+Login into VBox:
 
-    HOST_IP=192.168.100.10 ./start_everything.sh
+    vagrant ssh
+
+Inside of the Virtual Box start Marathon:
+
+    [HOST_IP=192.168.100.10] ./start_marathon.sh
 
 Run a dummy web-server:
 
@@ -38,6 +42,22 @@ There is no easy way to retrieve the logs of the client, so use the following sc
 
 Make sure the previous command continuously prints the result of the client accessing */public* and */private* API of the web-server:
 
+    ...
+    --------------------------------
+    GET /public
+    OK
+
+    GET /private
+    OK
+    --------------------------------
+    GET /public
+    OK
+
+    GET /private
+    OK
+    --------------------------------
+    ...
+
 Now, in a different terminal apply a provided policy that allows accessing only */public* API:
 
     cilium policy import l7-policy.json
@@ -52,10 +72,13 @@ To clean the node kill all mesos-master, mesos-agent, marathon related processes
 
 ## Troubleshooting
 
-### start\_everything.sh dumps core or exits with erros
+### Mesos master and slave do not seem to be working
 
-Inspect *mesos-master.log*, *mesos-agent.log* and *marathon.log* for any obvious errors.
-Kill any previous mesos/marathon processes if needed.
+Inspect result of journalctl and *marathon.log* for any obvious errors.
+Restart mesos/marathon processes if needed.
+
+    sudo service mesos-master restart
+    sudo service mesos-slave restart
 
 ### tail\_client.sh does not print anything
 

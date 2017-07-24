@@ -1,4 +1,9 @@
-r!/usr/bin/env bash
+#!/usr/bin/env bash
+
+if [[ -z $HOST_IP ]]; then
+        echo "HOST_IP is not set. Exiting..."
+        exit -1
+fi
 
 apt-get update
 #apt-get -y upgrade
@@ -13,8 +18,18 @@ apt -y install /tmp/mesos_1.3.0-2.0.3.ubuntu1610_amd64.deb
 # removing openjdk-9 will install openjdk-8 automatically
 apt -y remove openjdk-9-jre-headless
 
-echo "zk://localhost:2181/mesos" >> /etc/mesos/zk
-echo "/var/lib/mesos" >> /etc/mesos/work_dir
+echo "/var/lib/mesos" > /etc/mesos/work_dir
+echo "zk://$HOST_IP:2181/mesos" > /etc/mesos/zk
+
+echo "$HOST_IP" > /etc/mesos-master/ip
+
+echo "$HOST_IP" > /etc/mesos-slave/ip
+echo "/var/run/docker.sock" > /etc/mesos-slave/docker_socket
+echo "docker,mesos" > /etc/mesos-slave/containerizers
+echo "docker" > /etc/mesos-slave/image_providers
+echo "filesystem/linux,docker/runtime" > /etc/mesos-slave/isolation
+echo "/opt/cni/bin" > /etc/mesos-slave/network_cni_plugins_dir
+echo "/etc/cni/net.d" > /etc/mesos-slave/network_cni_config_dir
 
 curl -sL http://downloads.mesosphere.com/marathon/v1.4.5/marathon-1.4.5.tgz | tar -xz
 mv marathon-1.4.5 marathon
@@ -26,17 +41,13 @@ curl -sL https://github.com/docker/compose/releases/download/1.14.0/docker-compo
 chmod a+x /usr/bin/docker-compose
 
 service zookeeper restart
-
-# for some reason mesos-slave does not really work well with cilium
-# we will use mesos-agent instead
-service mesos-slave stop
-
 service mesos-master restart
+service mesos-slave restart
 
 tar xzvf allfiles.tar.gz
 rm allfiles.tar.gz
 
-IFACE=enp0s3 docker-compose up -d
+docker-compose up -d
 
 while [[ -z $cilium_docker ]]; do
         sleep 1
